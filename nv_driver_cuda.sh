@@ -22,16 +22,16 @@ CHECK_LAPTOP3=$(dmidecode -t chassis | grep Convertible >/dev/null); CHECK_LAPTO
 SB_STATE=$(mokutil --sb-state | grep enabled >/dev/null); SB_STATE=$?
 IS_CUDA_KEYRING=$(dpkg -l | grep cuda-keyring >/dev/null); IS_CUDA_KEYRING=$?
 
-function nv_cuda () 
+function nv_cuda ()
 {
 while true; do
 echo -e "${YELLOW}Please make a choice. E|e|Exit for exit${ENDCOLOR}"
-read -p "[1] Install NVIDIA CUDA toolkit, NVIDIA GPU driver, docker, and nvidia-container-toolkit
+read -rp "[1] Install NVIDIA CUDA toolkit, NVIDIA GPU driver, docker, and nvidia-container-toolkit
 [2] Install NVIDIA CUDA Toolkit and NVIDIA GPU driver
 [3] Install NVIDIA GPU driver
 [4] Uninstall NVIDIA CUDA toolkit and NVIDIA GPU driver
 [E] Exit
-Your choice: " -a array 
+Your choice: " -a array
 for choice in "${array[@]}"; do
 case $choice in
 [1])
@@ -64,13 +64,13 @@ mkdir -p /etc/apt/keyrings && chmod 0755 /etc/apt/keyrings
 curl -kfsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
 echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  tee /etc/apt/sources.list.d/docker.list > /dev/null
+ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+ tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 echo -e "${YELLOW}Installing CUDA toolkit, NVIDIA driver, docker, and nvidia-container-toolkit. Please wait...${ENDCOLOR}"
 apt update
-apt -y cuda-toolkit $(nvidia-detector) $(nvidia-detector | sed 's/driver/dkms/g') nvidia-prime install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin nvidia-container-toolkit
+apt -y cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin nvidia-container-toolkit
 nvidia-ctk runtime configure --runtime=docker
 systemctl enable docker
 echo -e "${GREEN}Done! Please reboot your computer.${ENDCOLOR}"
@@ -96,7 +96,7 @@ fi
 echo -e "${YELLOW}Installing CUDA toolkit and NVIDIA driver. Please wait...${ENDCOLOR}"
 sleep 1
 apt update
-apt -y install cuda-toolkit $(nvidia-detector) $(nvidia-detector | sed 's/driver/dkms/g') nvidia-prime
+apt -y install cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime
 if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
     prime-select on-demand
 fi
@@ -108,7 +108,7 @@ exit 0
 echo -e "${YELLOW}Installing latest NVIDIA driver. Please wait...${ENDCOLOR}"
 sleep 1
 apt update
-apt -y install $(nvidia-detector) $(nvidia-detector | sed 's/driver/dkms/g') nvidia-prime
+apt -y install "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime
 if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
     prime-select on-demand
 fi
@@ -148,10 +148,10 @@ if [[ $SB_STATE = 0 ]]; then
 mokutil --timeout 1000
 fi
 
-if [[ dpkg --compare-versions "$UBUNTU_VER" ge "20.04" && $IS_NVGPU = 0 ]]; then
+if dpkg --compare-versions "$UBUNTU_VER" ge "20.04" && [ $IS_NVGPU = 0 ]; then
 service systemd-resolved restart
 nv_cuda
-elif [[ dpkg --compare-versions "$UBUNTU_VER" lt "20.04" ]]; then
+elif dpkg --compare-versions "$UBUNTU_VER" lt "20.04"; then
 echo -e "${RED}This OS version is no longer supported, please upgrade it to at least Ubuntu 20.04.${ENDCOLOR}"
 echo -e "${RED}Exiting...${ENDCOLOR}"
 exit 1
