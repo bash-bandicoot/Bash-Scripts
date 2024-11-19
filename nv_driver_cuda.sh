@@ -25,7 +25,6 @@ IS_CUDA_KEYRING=$(dpkg -l | grep cuda-keyring >/dev/null); IS_CUDA_KEYRING=$?
 function nv_cuda ()
 {
 while true; do
-echo -e "${YELLOW}Please make a choice. E|e|Exit for exit${ENDCOLOR}"
 read -rp "[1] Install NVIDIA CUDA toolkit, NVIDIA GPU driver, docker, and nvidia-container-toolkit
 [2] Install NVIDIA CUDA Toolkit and NVIDIA GPU driver
 [3] Install NVIDIA GPU driver
