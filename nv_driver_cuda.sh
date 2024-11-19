@@ -69,7 +69,7 @@ echo \
 
 echo -e "${YELLOW}Installing CUDA toolkit, NVIDIA driver, docker, and nvidia-container-toolkit. Please wait...${ENDCOLOR}"
 apt update
-apt -y cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin nvidia-container-toolkit
+apt install -y cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin nvidia-container-toolkit
 nvidia-ctk runtime configure --runtime=docker
 systemctl enable docker
 echo -e "${GREEN}Done! Please reboot your computer.${ENDCOLOR}"
