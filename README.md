@@ -1,1 +1,1 @@
-General BASH scripts
+NVIDIA-related scripts for Linux
