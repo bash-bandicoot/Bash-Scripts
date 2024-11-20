@@ -36,15 +36,15 @@ case $choice in
 [1])
 echo -e "${YELLOW}Verifying CUDA tookit repository. Please wait...${ENDCOLOR}"
 sleep 1
-if [[ $IS_CUDA_KEYRING != 0 && $UBUNTU_VER = "20.04" ]]; then
+if [[ $IS_CUDA_KEYRING -ne 0 && $UBUNTU_VER = "20.04" ]]; then
     wget --no-check-certificate -P /opt/ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb
     dpkg -i /opt/cuda-keyring_1.1-1_all.deb
     rm -rf /opt/cuda-keyring_1.1-1_all.deb
-elif [[ $IS_CUDA_KEYRING != 0 && $UBUNTU_VER = "22.04" ]]; then
+elif [[ $IS_CUDA_KEYRING -ne 0 && $UBUNTU_VER = "22.04" ]]; then
     wget --no-check-certificate -P /opt/ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
     dpkg -i /opt/cuda-keyring_1.1-1_all.deb
     rm -rf /opt/cuda-keyring_1.1-1_all.deb
-elif [[ $IS_CUDA_KEYRING != 0 && $UBUNTU_VER = "24.04" ]]; then
+elif [[ $IS_CUDA_KEYRING -ne 0 && $UBUNTU_VER = "24.04" ]]; then
     wget -q -P /opt/ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
     dpkg -i /opt/cuda-keyring_1.1-1_all.deb
     rm -rf /opt/cuda-keyring_1.1-1_all.deb
@@ -73,7 +73,7 @@ fi
 
 echo -e "${YELLOW}Installing CUDA toolkit, NVIDIA driver, docker, and nvidia-container-toolkit. Please wait...${ENDCOLOR}"
 apt update
-apt -y install cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin nvidia-container-toolkit
+apt install cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin nvidia-container-toolkit -y
 nvidia-ctk runtime configure --runtime=docker
 systemctl enable docker
 echo -e "${GREEN}Done! Please reboot your computer.${ENDCOLOR}"
@@ -83,15 +83,15 @@ exit 0
 [2])
 echo -e "${YELLOW}Verifying CUDA tookit repo, please wait...${ENDCOLOR}"
 sleep 1
-if [[ $IS_CUDA_KEYRING != 0 && $UBUNTU_VER = "20.04" ]]; then
+if [[ $IS_CUDA_KEYRING -ne 0 && $UBUNTU_VER = "20.04" ]]; then
     wget --no-check-certificate -P /opt/ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb
     dpkg -i /opt/cuda-keyring_1.1-1_all.deb
     rm -rf /opt/cuda-keyring_1.1-1_all.deb
-elif [[ $IS_CUDA_KEYRING != 0 && $UBUNTU_VER = "22.04" ]]; then
+elif [[ $IS_CUDA_KEYRING -ne 0 && $UBUNTU_VER = "22.04" ]]; then
     wget --no-check-certificate -P /opt/ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
     dpkg -i /opt/cuda-keyring_1.1-1_all.deb
     rm -rf /opt/cuda-keyring_1.1-1_all.deb
-elif [[ $IS_CUDA_KEYRING != 0 && $UBUNTU_VER = "24.04" ]]; then
+elif [[ $IS_CUDA_KEYRING -ne 0 && $UBUNTU_VER = "24.04" ]]; then
     wget -q -P /opt/ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
     dpkg -i /opt/cuda-keyring_1.1-1_all.deb
     rm -rf /opt/cuda-keyring_1.1-1_all.deb
@@ -99,7 +99,7 @@ fi
 echo -e "${YELLOW}Installing CUDA toolkit and NVIDIA driver. Please wait...${ENDCOLOR}"
 sleep 1
 apt update
-apt -y install cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime
+apt install cuda-toolkit "$(nvidia-detector)" "$(nvidia-detector | sed 's/driver/dkms/g')" nvidia-prime -y
 if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
     prime-select on-demand
 fi
@@ -151,7 +151,7 @@ if [[ $SB_STATE = 0 ]]; then
 mokutil --timeout 1000
 fi
 
-if dpkg --compare-versions "$UBUNTU_VER" ge "20.04" && [ $IS_NVGPU = 0 ]; then
+if dpkg --compare-versions "$UBUNTU_VER" ge "20.04" && [ $IS_NVGPU -eq 0 ]; then
 service systemd-resolved restart
 nv_cuda
 elif dpkg --compare-versions "$UBUNTU_VER" lt "20.04"; then
