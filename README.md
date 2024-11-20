@@ -1,9 +1,10 @@
-# NVIDIA Driver, CUDA, nvidia-container-toolkit installation scripts
+# NVIDIA on Linux (Ubuntu/Fedora)
 
 - How-To:
 
     ```sh
     sudo bash nv_driver_cuda_deb.sh
+    or
     sudo bash nv_driver_cuda_rpm.sh
 
     [1] Install NVIDIA CUDA toolkit, NVIDIA GPU driver, docker, and nvidia-container-toolkit
