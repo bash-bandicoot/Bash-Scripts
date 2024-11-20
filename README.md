@@ -1,4 +1,4 @@
-# NVIDIA Driver, CUDA, nvidia-container-toolkit instalaltion scripts
+# NVIDIA Driver, CUDA, nvidia-container-toolkit installation scripts
 
 - How-To:
 
