@@ -8,7 +8,6 @@ GREEN="\033[0;32m"
 ENDCOLOR="\033[0m"
 
 
-
 if [[ $USER != root ]]; then
         echo -e "${RED}Error: must be run with sudo${ENDCOLOR}"
         echo -e "${YELLOW}Exiting...${ENDCOLOR}"
@@ -255,7 +254,7 @@ done
 done
 }
 
-if [[ $SB_STATE = 0 ]]; then
+if [[ $SB_STATE -eq 0 ]]; then
 mokutil --timeout 1000
 fi
 
