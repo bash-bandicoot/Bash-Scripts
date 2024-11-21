@@ -14,3 +14,7 @@
     [E] Exit
     Your choice:
     ```
+
+## To-Do
+
+On Fedora 40/41 we're using Fedora 39 CUDA repo (12.6) since NVIDIA is still working on Fedora 41 CUDA repo (12.8)
