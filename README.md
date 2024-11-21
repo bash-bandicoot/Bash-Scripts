@@ -7,10 +7,10 @@
     or
     sudo bash nv_driver_cuda_rpm.sh
 
-    [1] Install NVIDIA CUDA toolkit, NVIDIA GPU driver, docker, and nvidia-container-toolkit
-    [2] Install NVIDIA CUDA Toolkit and NVIDIA GPU driver
+    [1] Install NVIDIA GPU driver, NVIDIA CUDA toolkit, docker, and nvidia-container-toolkit
+    [2] Install NVIDIA GPU driver and NVIDIA CUDA toolkit
     [3] Install NVIDIA GPU driver
-    [4] Uninstall NVIDIA CUDA toolkit and NVIDIA GPU driver
+    [4] Uninstall NVIDIA GPU driver and NVIDIA CUDA toolkit
     [E] Exit
     Your choice:
     ```
