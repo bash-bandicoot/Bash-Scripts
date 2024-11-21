@@ -20,7 +20,7 @@ CHECK_LAPTOP=$(ls /proc/acpi/button/lid 2>&1 >/dev/null); CHECK_LAPTOP=$?
 CHECK_LAPTOP2=$(dmidecode -t chassis | grep Notebook >/dev/null); CHECK_LAPTOP2=$?
 CHECK_LAPTOP3=$(dmidecode -t chassis | grep Convertible >/dev/null); CHECK_LAPTOP3=$?
 
-function nv_cuda ()
+function nv_cuda_rpm ()
 {
 while true; do
 read -rp "[1] Install NVIDIA CUDA toolkit, NVIDIA GPU driver, docker, and nvidia-container-toolkit
@@ -259,8 +259,8 @@ mokutil --timeout 1000
 fi
 
 if [[ $IS_NVGPU -eq 0 ]]; then
-service systemd-resolved restart
-nv_cuda
+systemctl restart systemd-resolved
+nv_cuda_rpm
 else
 echo -e "${YELLOW}This computer does not have an NVIDIA GPU. NVIDIA GPU CUDA/driver is not required.${ENDCOLOR}"
 echo -e "${YELLOW}Exiting...${ENDCOLOR}"
