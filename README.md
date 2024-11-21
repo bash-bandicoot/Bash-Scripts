@@ -15,6 +15,11 @@
     Your choice:
     ```
 
+To add CUDA path to user's environment variables, please do (BASH example):
+Open Terminal
+echo 'export PATH=${PATH}:/usr/local/cuda/bin/' >> $HOME/.bashrc
+source $HOME/.bashrc
+
 ## To-Do
 
 On Fedora 40/41 we're using Fedora 39 CUDA repo (12.6) since NVIDIA is still working on Fedora 41 CUDA repo (12.8)

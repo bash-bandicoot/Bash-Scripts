@@ -37,7 +37,7 @@ dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce
 [ ! -s /etc/yum.repos.d/nvidia-container-toolkit.repo ] && curl -s -k -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | tee /etc/yum.repos.d/nvidia-container-toolkit.repo
 dnf -y copr enable sunwire/envycontrol
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y module install nvidia-driver:open-dkms
+        dnf -y module install nvidia-driver:latest-dkms
         dnf -y install cuda-toolkit-12-6 gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
         nvidia-ctk runtime configure --runtime=docker
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
@@ -66,7 +66,7 @@ elif [[ $SB_STATE -eq 0 ]]; then
         echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         sleep 1
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y module install nvidia-driver:open-dkms
+        dnf -y module install nvidia-driver:latest-dkms
         dnf -y install cuda-toolkit-12-6 gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
         nvidia-ctk runtime configure --runtime=docker
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
@@ -97,7 +97,7 @@ fi
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
 dnf -y copr enable sunwire/envycontrol
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y module install nvidia-driver:open-dkms
+        dnf -y module install nvidia-driver:latest-dkms
         dnf -y install cuda-toolkit-12-6 gcc13 python3-envycontrol
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
@@ -125,7 +125,7 @@ elif [[ $SB_STATE -eq 0 ]]; then
         echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         sleep 1
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y module install nvidia-driver:open-dkms
+        dnf -y module install nvidia-driver:latest-dkms
         dnf -y install cuda-toolkit-12-6 gcc13 python3-envycontrol
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
@@ -155,7 +155,7 @@ fi
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
 dnf -y copr enable sunwire/envycontrol
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y module install nvidia-driver:open-dkms
+        dnf -y module install nvidia-driver:latest-dkms
         dnf -y install python3-envycontrol
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
@@ -183,7 +183,7 @@ elif [[ $SB_STATE -eq 0 ]]; then
         echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         sleep 1
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y module install nvidia-driver:open-dkms
+        dnf -y module install nvidia-driver:latest-dkms
         dnf -y install python3-envycontrol
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
@@ -212,7 +212,8 @@ fi
 [4])
 echo -e "${YELLOW}Removing NVIDIA CUDA toolkit and NVIDIA driver. Please wait...${ENDCOLOR}"
 sleep 1
-dnf -y module remove nvidia-driver:open-dkms
+dnf -y remove nvidia-driver
+dnf -y module reset nvidia-driver
 dnf -y remove cuda-toolkit-12-6
 echo -e "${GREEN}Done! Please reboot your computer for changes to take effect.${ENDCOLOR}"
 sleep 1
