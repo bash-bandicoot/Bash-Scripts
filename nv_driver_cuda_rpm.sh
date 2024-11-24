@@ -32,13 +32,17 @@ Your choice: " -a array
 for choice in "${array[@]}"; do
 case $choice in
 [1])
+dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
+dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
 dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 [ ! -s /etc/yum.repos.d/nvidia-container-toolkit.repo ] && curl -s -k -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | tee /etc/yum.repos.d/nvidia-container-toolkit.repo
 dnf -y copr enable sunwire/envycontrol
+dnf -y upgrade --refresh
+dnf -y module disable nvidia-driver
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y module install nvidia-driver:latest-dkms
-        dnf -y install cuda-toolkit-12-6 gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
+        dnf -y install cuda-toolkit gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
         nvidia-ctk runtime configure --runtime=docker
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
@@ -59,15 +63,17 @@ Section "ServerLayout"
         Option "AllowNVIDIAGPUScreens"
 EndSection
 EOL
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot the computer and test NVIDIA driver${ENDCOLOR}"
 sleep 1
 exit 0
 elif [[ $SB_STATE -eq 0 ]]; then
-        echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         sleep 1
+        echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y module install nvidia-driver:latest-dkms
-        dnf -y install cuda-toolkit-12-6 gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
+        dnf -y install cuda-toolkit gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
         nvidia-ctk runtime configure --runtime=docker
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
@@ -88,17 +94,23 @@ Section "ServerLayout"
         Option "AllowNVIDIAGPUScreens"
 EndSection
 EOL
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot the computer and test NVIDIA driver${ENDCOLOR}"
 sleep 1
 exit 0
 fi
 ;;
 [2])
+dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
+dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
 dnf -y copr enable sunwire/envycontrol
+dnf -y upgrade --refresh
+dnf -y module disable nvidia-driver
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y module install nvidia-driver:latest-dkms
-        dnf -y install cuda-toolkit-12-6 gcc13 python3-envycontrol
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
+        dnf -y install cuda-toolkit gcc13 python3-envycontrol
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
         fi
@@ -118,15 +130,17 @@ Section "ServerLayout"
         Option "AllowNVIDIAGPUScreens"
 EndSection
 EOL
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot the computer and test NVIDIA driver${ENDCOLOR}"
 sleep 1
 exit 0
 elif [[ $SB_STATE -eq 0 ]]; then
-        echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         sleep 1
+        echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y module install nvidia-driver:latest-dkms
-        dnf -y install cuda-toolkit-12-6 gcc13 python3-envycontrol
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
+        dnf -y install cuda-toolkit gcc13 python3-envycontrol
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
         fi
@@ -146,17 +160,21 @@ Section "ServerLayout"
         Option "AllowNVIDIAGPUScreens"
 EndSection
 EOL
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot the computer and test NVIDIA driver${ENDCOLOR}"
 sleep 1
 exit 0
 fi
 ;;
 [3])
-dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
+dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
+dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 dnf -y copr enable sunwire/envycontrol
+dnf -y upgrade --refresh
+dnf -y module disable nvidia-driver
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y module install nvidia-driver:latest-dkms
-        dnf -y install python3-envycontrol
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda python3-envycontrol kmodtool akmods mokutil openssl
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
         fi
@@ -176,15 +194,16 @@ Section "ServerLayout"
         Option "AllowNVIDIAGPUScreens"
 EndSection
 EOL
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot the computer and test NVIDIA driver${ENDCOLOR}"
 sleep 1
 exit 0
 elif [[ $SB_STATE -eq 0 ]]; then
-        echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         sleep 1
+        echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y module install nvidia-driver:latest-dkms
-        dnf -y install python3-envycontrol
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda python3-envycontrol kmodtool akmods mokutil openssl
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
                 envycontrol -s hybrid --rtd3 >/dev/null
         fi
@@ -204,6 +223,8 @@ Section "ServerLayout"
         Option "AllowNVIDIAGPUScreens"
 EndSection
 EOL
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot the computer, enroll MOK, and test NVIDIA driver${ENDCOLOR}"
 sleep 1
 exit 0
@@ -212,9 +233,9 @@ fi
 [4])
 echo -e "${YELLOW}Removing NVIDIA CUDA toolkit and NVIDIA driver. Please wait...${ENDCOLOR}"
 sleep 1
-dnf -y remove nvidia-driver
-dnf -y module reset nvidia-driver
-dnf -y remove cuda-toolkit-12-6
+dnf -y remove kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda cuda-toolkit
+akmods --force
+dracut --force
 echo -e "${GREEN}Done! Please reboot your computer for changes to take effect.${ENDCOLOR}"
 sleep 1
 exit 0
