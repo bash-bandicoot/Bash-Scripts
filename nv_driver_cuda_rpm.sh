@@ -26,7 +26,7 @@ while true; do
 read -rp "[1] Install NVIDIA GPU driver, NVIDIA CUDA toolkit, docker, and nvidia-container-toolkit
 [2] Install NVIDIA GPU driver and NVIDIA CUDA Toolkit
 [3] Install NVIDIA GPU driver
-[4] Uninstall NVIDIA GPU driver and NVIDIA CUDA toolkit
+[4] Uninstall NVIDIA GPU driver
 [E] Exit
 Your choice: " -a array
 for choice in "${array[@]}"; do
@@ -37,15 +37,14 @@ dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
 dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 [ ! -s /etc/yum.repos.d/nvidia-container-toolkit.repo ] && curl -s -k -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | tee /etc/yum.repos.d/nvidia-container-toolkit.repo
-dnf -y copr enable sunwire/envycontrol
 dnf -y upgrade --refresh
 dnf -y module disable nvidia-driver
 if [[ $SB_STATE -ne 0 ]]; then
         dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
-        dnf -y install cuda-toolkit gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
+        dnf -y install cuda-toolkit gcc13 docker-ce nvidia-container-toolkit
         nvidia-ctk runtime configure --runtime=docker
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
-                envycontrol -s hybrid --rtd3 >/dev/null
+                sytemctl disable nvidia-persistenced
         fi
 cat > /etc/X11/xorg.conf.d/nvidia.conf << 'EOL'
 Section "OutputClass"
@@ -73,10 +72,10 @@ elif [[ $SB_STATE -eq 0 ]]; then
         echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         mokutil --import /etc/pki/akmods/certs/public_key.der
         dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
-        dnf -y install cuda-toolkit gcc13 docker-ce nvidia-container-toolkit python3-envycontrol
+        dnf -y install cuda-toolkit gcc13 docker-ce nvidia-container-toolkit
         nvidia-ctk runtime configure --runtime=docker
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
-                envycontrol -s hybrid --rtd3 >/dev/null
+                sytemctl disable nvidia-persistenced
         fi
 cat > /etc/X11/xorg.conf.d/nvidia.conf << 'EOL'
 Section "OutputClass"
@@ -105,14 +104,13 @@ fi
 dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
 dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
-dnf -y copr enable sunwire/envycontrol
 dnf -y upgrade --refresh
 dnf -y module disable nvidia-driver
 if [[ $SB_STATE -ne 0 ]]; then
         dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
-        dnf -y install cuda-toolkit gcc13 python3-envycontrol
+        dnf -y install cuda-toolkit gcc13
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
-                envycontrol -s hybrid --rtd3 >/dev/null
+                sytemctl disable nvidia-persistenced
         fi
 cat > /etc/X11/xorg.conf.d/nvidia.conf << 'EOL'
 Section "OutputClass"
@@ -140,9 +138,9 @@ elif [[ $SB_STATE -eq 0 ]]; then
         echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         mokutil --import /etc/pki/akmods/certs/public_key.der
         dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
-        dnf -y install cuda-toolkit gcc13 python3-envycontrol
+        dnf -y install cuda-toolkit gcc13
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
-                envycontrol -s hybrid --rtd3 >/dev/null
+                sytemctl disable nvidia-persistenced
         fi
 cat > /etc/X11/xorg.conf.d/nvidia.conf << 'EOL'
 Section "OutputClass"
@@ -170,13 +168,12 @@ fi
 [3])
 dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm
 dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
-dnf -y copr enable sunwire/envycontrol
 dnf -y upgrade --refresh
 dnf -y module disable nvidia-driver
 if [[ $SB_STATE -ne 0 ]]; then
-        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda python3-envycontrol kmodtool akmods mokutil openssl
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
-                envycontrol -s hybrid --rtd3 >/dev/null
+                sytemctl disable nvidia-persistenced
         fi
 cat > /etc/X11/xorg.conf.d/nvidia.conf << 'EOL'
 Section "OutputClass"
@@ -203,9 +200,9 @@ elif [[ $SB_STATE -eq 0 ]]; then
         sleep 1
         echo -e "${YELLOW}Please create one-time MOK password (123456789)${ENDCOLOR}"
         mokutil --import /etc/pki/akmods/certs/public_key.der
-        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda python3-envycontrol kmodtool akmods mokutil openssl
+        dnf -y install kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda kmodtool akmods mokutil openssl
         if [[ $CHECK_LAPTOP -eq 0 || $CHECK_LAPTOP2 -eq 0 || $CHECK_LAPTOP3 -eq 0 ]]; then
-                envycontrol -s hybrid --rtd3 >/dev/null
+                sytemctl disable nvidia-persistenced
         fi
 cat > /etc/X11/xorg.conf.d/nvidia.conf << 'EOL'
 Section "OutputClass"
@@ -231,9 +228,9 @@ exit 0
 fi
 ;;
 [4])
-echo -e "${YELLOW}Removing NVIDIA CUDA toolkit and NVIDIA driver. Please wait...${ENDCOLOR}"
+echo -e "${YELLOW}Removing NVIDIA driver. Please wait...${ENDCOLOR}"
 sleep 1
-dnf -y remove kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda cuda-toolkit
+dnf -y remove kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686 xorg-x11-drv-nvidia-cuda
 akmods --force
 dracut --force
 echo -e "${GREEN}Done! Please reboot your computer for changes to take effect.${ENDCOLOR}"
