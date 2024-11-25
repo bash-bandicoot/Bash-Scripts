@@ -13,6 +13,10 @@
     [E] Exit
     Your choice:
 
+### MOK enrollment how-to
+
+- <https://cuda-installer.gitlab-master-pages.nvidia.com/kitmaker-docs/driver/gnome-software-secure-boot.html#:~:text=system%20will%20restart.-,Machine%20Owner%20Key%20enrollment,-%23>
+
 ### CUDA Environment Variables
 
 - To add CUDA path to user's environment variables, please do (BASH example):
