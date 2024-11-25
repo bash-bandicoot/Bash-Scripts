@@ -9,7 +9,7 @@
     [1] Install NVIDIA GPU driver, NVIDIA CUDA toolkit, docker, and nvidia-container-toolkit
     [2] Install NVIDIA GPU driver and NVIDIA CUDA toolkit
     [3] Install NVIDIA GPU driver
-    [4] Uninstall NVIDIA GPU driver and NVIDIA CUDA toolkit
+    [4] Uninstall NVIDIA GPU driver
     [E] Exit
     Your choice:
 
@@ -24,6 +24,6 @@
 - echo 'export PATH=${PATH}:/usr/local/cuda/bin/' >> $HOME/.bashrc
 - source $HOME/.bashrc
 
-#### To-Do
+### To-Do
 
 - On Fedora 40/41 we're using Fedora 39 CUDA repo (12.6) since NVIDIA is still working on Fedora 41 CUDA repo (12.8)
